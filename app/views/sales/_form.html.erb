@@ -1,0 +1,37 @@
+<%= form_with(model: sale, local: true) do |form| %>
+  <% if sale.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(sale.errors.count, "error") %> prohibited this sale from being saved:</h2>
+
+      <ul>
+      <% sale.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <h6>You are buying:</h6>
+  <ul>
+    <li><%= reservation.book.name %> by  <%= reservation.book.author %></li>
+  </ul>
+
+  <div class="field">
+    <%= form.label :payment_method %>
+    <%= form.select :payment_method, Sale.payment_methods.keys.map { |w| [w.humanize, w] }, include_blank: 'Select your Payment Method' %>
+  </div>
+  
+  <div class="actions">
+    <%= form.submit 'Pay Now' %>
+    <%= form.hidden_field :reservation_id, value: reservation.id %>
+    <%= form.hidden_field :user_id, value: current_user.id %>
+    <%= form.hidden_field :book_name, value: reservation.book.name %>
+    <%= form.hidden_field :book_author, value: reservation.book.author %>
+
+  </div>
+  
+<% end %>
+
+<div>
+  <span> This form will be blocked in</span>
+  <span id="timer"></span>
+</div>
